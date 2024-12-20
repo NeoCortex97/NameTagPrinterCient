@@ -30,11 +30,12 @@ public class HelloController implements Initializable {
     private Button startButton;
     @FXML
     private DialogPane dialogPane;
+    @FXML
+    private FontIcon startIcon;
 
     private DialogPane.Dialog<String> scanDialog;
     private DialogPane.Dialog<Void> printDialog;
     private DialogPane.Dialog<Void> receiptDialog;
-    private DialogPane.Dialog<Void> busy;
 
     private TextField jobId;
     private Button continueButton;
@@ -66,6 +67,7 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        startIcon.setIconCode(MaterialDesign.MDI_PLAY_CIRCLE);
         setupScanDialog();
         setupPrintDialog();
         setupReceiptDialog();
