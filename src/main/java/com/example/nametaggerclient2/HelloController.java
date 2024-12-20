@@ -3,6 +3,7 @@ package com.example.nametaggerclient2;
 import com.dlsc.gemsfx.CircleProgressIndicator;
 import com.dlsc.gemsfx.DialogPane;
 import com.example.nametaggerclient2.client.ZmqClient;
+import com.example.nametaggerclient2.services.PrinterService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 
 public class HelloController implements Initializable {
@@ -32,13 +34,15 @@ public class HelloController implements Initializable {
     private DialogPane.Dialog<String> scanDialog;
     private DialogPane.Dialog<Void> printDialog;
     private DialogPane.Dialog<Void> receiptDialog;
+    private DialogPane.Dialog<Void> busy;
 
     private TextField jobId;
     private Button continueButton;
 
-    private String jobName = "";
+    private PrinterService service = new PrinterService();
 
-    private ZmqClient client = new ZmqClient();
+    Pattern regex = Pattern.compile("(.+?);(.*?);(.*?);(true|false)");
+
 
     @FXML
     public void onStartPressed(ActionEvent ignoredEvent) {
@@ -48,21 +52,16 @@ public class HelloController implements Initializable {
     }
 
     public void onCodeScanned(ActionEvent event) {
-        DialogPane.Dialog<Void> busy = dialogPane.showBusyIndicator();
-        busy.setMaximize(true);
-
-        List<String> parts = List.of(jobId.getText().split("\\s*;\\s*"));
-
-        String result = client.sendPrintCommand(parts.get(0), parts.get(1), parts.get(2), parts.get(3));
-
-        continueButton.setVisible(true);
-        dialogPane.hideDialog(busy);
+        if (regex.matcher(jobId.getText()).find()) {
+            continueButton.setVisible(true);
+        }
     }
 
     private void onContinued(ActionEvent event) {
         printDialog.show();
-        jobName = jobId.getText();
+        continueButton.setVisible(false);
         scanDialog.cancel();
+        service.start(jobId.getText());
     }
 
     @Override
@@ -70,6 +69,11 @@ public class HelloController implements Initializable {
         setupScanDialog();
         setupPrintDialog();
         setupReceiptDialog();
+
+        service.setOnSucceeded(event -> {
+            printDialog.cancel();
+            service.reset();
+        });
 
         dialogPane.setAnimateDialogs(true);
     }

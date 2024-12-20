@@ -16,8 +16,8 @@ public class HelloApplication extends Application {
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setTitle("Hello!");
         stage.setScene(scene);
-        //stage.setAlwaysOnTop(true);
-        //stage.setFullScreen(true);
+        stage.setAlwaysOnTop(true);
+        stage.setFullScreen(true);
         stage.show();
         stage.requestFocus();
     }

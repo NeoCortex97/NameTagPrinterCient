@@ -34,4 +34,8 @@ public class ZmqClient {
     public String sendPrintCommand(String name, String space, String logo, String url) {
         return send(encode("TAG", name, space, logo, url));
     }
+
+    public String sendReceiptCommand(String name, String space, String logo, String url) {
+        return send(encode("RECEIPT", name, space, logo, url));
+    }
 }
