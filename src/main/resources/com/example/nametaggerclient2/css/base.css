@@ -1,0 +1,7 @@
+.hidden {
+    -fx-opacity: 0;
+}
+
+.dark {
+    -fx-background-color: #212121;
+}

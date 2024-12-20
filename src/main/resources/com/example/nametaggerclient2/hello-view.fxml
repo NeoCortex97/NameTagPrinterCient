@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.dlsc.gemsfx.DialogPane?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="dark" stylesheets="@css/base.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.nametaggerclient2.HelloController">
+   <children>
+      <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartPressed" style="-fx-font-size: 36;" text="START">
+         <graphic>
+            <FontIcon iconColor="WHITE" iconLiteral="fas-play-circle" />
+         </graphic>
+         <font>
+            <Font size="36.0" />
+         </font>
+         <styleClass>
+            <String fx:value="btn-primary" />
+            <String fx:value="btn" />
+         </styleClass>
+      </Button>
+      <DialogPane fx:id="dialogPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+   </children>
+</StackPane>
