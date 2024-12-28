@@ -2,7 +2,7 @@ package com.example.nametaggerclient2;
 
 import com.dlsc.gemsfx.CircleProgressIndicator;
 import com.dlsc.gemsfx.DialogPane;
-import com.example.nametaggerclient2.client.ZmqClient;
+import com.example.nametaggerclient2.model.PrintJob;
 import com.example.nametaggerclient2.services.PrinterService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,9 +20,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.materialdesign.MaterialDesign;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 
 
 public class HelloController implements Initializable {
@@ -42,7 +40,7 @@ public class HelloController implements Initializable {
 
     private PrinterService service = new PrinterService();
 
-    Pattern regex = Pattern.compile("(.+?);(.*?);(.*?);(true|false)");
+    private PrintJob job;
 
 
     @FXML
@@ -53,8 +51,12 @@ public class HelloController implements Initializable {
     }
 
     public void onCodeScanned(ActionEvent event) {
-        if (regex.matcher(jobId.getText()).find()) {
+        try {
+            job = PrintJob.fromString(jobId.getText());
             continueButton.setVisible(true);
+        } catch (Exception e) {
+            jobId.clear();
+            e.printStackTrace();
         }
     }
 
@@ -62,7 +64,7 @@ public class HelloController implements Initializable {
         printDialog.show();
         continueButton.setVisible(false);
         scanDialog.cancel();
-        service.start(jobId.getText());
+        service.start(job);
     }
 
     @Override

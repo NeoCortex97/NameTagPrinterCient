@@ -1,5 +1,6 @@
 package com.example.nametaggerclient2.client;
 
+import com.example.nametaggerclient2.model.PrintJob;
 import org.zeromq.SocketType;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
@@ -8,12 +9,12 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class ZmqClient {
-    private ZContext context = new ZContext();
-    private ZMQ.Socket socket;
+    private final ZContext context = new ZContext();
+    private final ZMQ.Socket socket;
 
     public ZmqClient() {
         socket = context.createSocket(SocketType.REQ);
-        socket.connect("tcp://127.0.0.1:6660");
+        socket.connect("tcp://127.0.0.1:6060");
     }
 
     private String encode(String ... values) {
@@ -23,19 +24,11 @@ public class ZmqClient {
         return joiner.toString();
     }
 
-    private String send(String command) {
-        socket.send(command.getBytes(ZMQ.CHARSET));
+    public String send(PrintJob command) {
+        socket.send(command.toString().getBytes(ZMQ.CHARSET));
 
         String result = socket.recvStr();
         System.out.println(result);
         return result;
-    }
-
-    public String sendPrintCommand(String name, String space, String logo, String url) {
-        return send(encode("TAG", name, space, logo, url));
-    }
-
-    public String sendReceiptCommand(String name, String space, String logo, String url) {
-        return send(encode("RECEIPT", name, space, logo, url));
     }
 }
